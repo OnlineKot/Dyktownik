@@ -40,6 +40,14 @@ jobs:
       - name: Install platform-specific native binaries
         run: npm install @rollup/rollup-win32-x64-msvc lightningcss-win32-x64-msvc @tailwindcss/oxide-win32-x64-msvc --no-save
 
+      # Wersja "lekka": bez rzeczy, które aplikacja pobiera sama, gdy ich potrzebuje
+      # (modele rozpoznawania mówców, model wyszukiwania semantycznego) albo które
+      # służą tylko opcjonalnym funkcjom (Qdrant do wyszukiwania po znaczeniu,
+      # yt-dlp do importu audio z linku). Dyktowanie, lokalne modele, notatki,
+      # spotkania i asystent działają tak samo.
+      - name: Compile native helpers (key listener)
+        run: npm run compile:native
+
       - name: Download whisper.cpp binaries
         run: node scripts/download-whisper-cpp.js --current
         env:
@@ -55,18 +63,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Download yt-dlp binary
-        run: node scripts/download-yt-dlp.js --current
-
-      - name: Download Qdrant binary
-        run: node scripts/download-qdrant.js --current
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
       - name: Download meeting AEC helper
         run: node scripts/download-meeting-aec-helper.js --current
         env:
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Download whisper VAD model
+        run: node scripts/download-whisper-vad-model.js
 
       - name: Download nircmd.exe
         run: node scripts/download-nircmd.js
@@ -89,6 +92,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
+      # electron-builder pakuje .env jako zasób; puste wystarcza (bez kluczy chmurowych).
+      - name: Create empty runtime env
+        shell: bash
+        run: touch .env
+
       # Każda budowa dostaje wyższy numer wersji, bo updater porównuje wersje
       # i pobiera tylko nowsze. Zmiana działa tylko w tej budowie, nie w repo.
       - name: Set build version
@@ -99,7 +107,10 @@ jobs:
 
       - name: Build and publish installer (unsigned)
         shell: bash
-        run: npm run build:win -- --publish always --config electron-builder.unsigned-win.json
+        # Bez "npm run build:win": jego hook prebuild pobierałby też to, co pominięto wyżej.
+        run: |
+          npm run build:renderer
+          npx electron-builder --win --publish always --config electron-builder.unsigned-win.json
         env:
           GH_TOKEN: ${{ github.token }}
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
