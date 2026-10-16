@@ -65,7 +65,7 @@ function normalizeUiLanguage(language) {
 
   // Fall back to base language code (e.g. "en" from "en-US")
   const base = lower.split("-")[0];
-  return SUPPORTED_UI_LANGUAGES.includes(base) ? base : "pl";
+  return SUPPORTED_UI_LANGUAGES.includes(base) ? base : "en";
 }
 
 const i18nMain = i18next.createInstance();

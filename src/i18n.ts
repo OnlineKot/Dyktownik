@@ -46,7 +46,7 @@ export function normalizeUiLanguage(language: string | null | undefined): UiLang
     return base;
   }
 
-  return "pl";
+  return "en";
 }
 
 const resources = {
@@ -106,7 +106,7 @@ const browserLanguage =
 const storageLanguage =
   typeof window !== "undefined" ? window.localStorage?.getItem("uiLanguage") : undefined;
 
-const initialLanguage = normalizeUiLanguage(storageLanguage || browserLanguage || "pl");
+const initialLanguage = normalizeUiLanguage(storageLanguage || browserLanguage || "en");
 
 void i18n.use(initReactI18next).init({
   resources,

@@ -898,6 +898,8 @@
   },
   "hooks": {
     "audioRecording": {
+      "cleanupSignedOut": "Czyszczenie tekstu przez AI korzysta z Dyktownik Cloud, ale jesteś wylogowany.",
+      "cleanupUnconfigured": "Czyszczenie tekstu przez AI jest włączone, ale nie wybrano żadnego modelu.",
       "errorTitles": {
         "sessionExpired": "Sesja wygasła",
         "offline": "Jesteś offline",
@@ -1938,18 +1940,18 @@
           "name": "Darmowy",
           "price": "$0",
           "period": "na zawsze",
-          "features": {
-            "0": "## Chmura Dyktownika",
-            "1": "Transkrypcja do 2000 słów tygodniowo",
-            "2": "5 godzin nagrań spotkań miesięcznie",
-            "3": "## Zawsze za darmo",
-            "4": "Lokalne modele AI bez limitu",
-            "5": "Transkrypcja w chmurze bez limitu z własnymi kluczami API",
-            "6": "Ponad 100 obsługiwanych języków",
-            "7": "Własny słownik",
-            "8": "Zero przechowywania danych",
-            "9": "Pomoc społeczności"
-          }
+          "features": [
+            "## Chmura Dyktownika",
+            "Transkrypcja do 2000 słów tygodniowo",
+            "5 godzin nagrań spotkań miesięcznie",
+            "## Zawsze za darmo",
+            "Lokalne modele AI bez limitu",
+            "Transkrypcja w chmurze bez limitu z własnymi kluczami API",
+            "Ponad 100 obsługiwanych języków",
+            "Własny słownik",
+            "Zero przechowywania danych",
+            "Pomoc społeczności"
+          ]
         },
         "pro": {
           "name": "Pro",
@@ -1959,16 +1961,16 @@
           "annualPeriod": "/rok",
           "annualEquivalent": "$6.67",
           "includesPrefix": "Wszystko z planu Darmowy +",
-          "features": {
-            "0": "Transkrypcja w chmurze bez limitu",
-            "1": "20 godzin nagrań spotkań miesięcznie",
-            "2": "Synchronizacja między urządzeniami",
-            "3": "Udostępnianie notatek przez publiczne linki",
-            "4": "Osobisty dostęp do API",
-            "5": "Integracja MCP we wszystkich Twoich aplikacjach",
-            "6": "Aplikacja mobilna",
-            "7": "Pomoc e-mailowa"
-          },
+          "features": [
+            "Transkrypcja w chmurze bez limitu",
+            "20 godzin nagrań spotkań miesięcznie",
+            "Synchronizacja między urządzeniami",
+            "Udostępnianie notatek przez publiczne linki",
+            "Osobisty dostęp do API",
+            "Integracja MCP we wszystkich Twoich aplikacjach",
+            "Aplikacja mobilna",
+            "Pomoc e-mailowa"
+          ],
           "cta": "Zaczynamy",
           "switchToAnnual": "Przejdź na plan roczny"
         },
@@ -1981,13 +1983,13 @@
           "annualEquivalent": "$13.33",
           "includesPrefix": "Wszystko z planu Pro +",
           "badge": "Najpopularniejszy",
-          "features": {
-            "0": "Nagrania spotkań bez limitu",
-            "1": "Role w przestrzeni i zarządzanie członkami",
-            "2": "Tryb asystenta",
-            "3": "Czat z Twoimi danymi",
-            "4": "Priorytetowa pomoc"
-          },
+          "features": [
+            "Nagrania spotkań bez limitu",
+            "Role w przestrzeni i zarządzanie członkami",
+            "Tryb asystenta",
+            "Czat z Twoimi danymi",
+            "Priorytetowa pomoc"
+          ],
           "cta": "Zaczynamy",
           "switchToAnnual": "Przejdź na plan roczny"
         },
@@ -1996,13 +1998,13 @@
           "price": "Indywidualnie",
           "subtitle": "Dla zaawansowanych potrzeb bezpieczeństwa i wsparcia",
           "includesPrefix": "Wszystko z planu Business +",
-          "features": {
-            "0": "Zarządzane kredyty API",
-            "1": "Synchronizacja w chmurze między urządzeniami",
-            "2": "Funkcje zespołowe i administracja",
-            "3": "SSO i zgodność z regulacjami",
-            "4": "Dedykowane wsparcie"
-          },
+          "features": [
+            "Zarządzane kredyty API",
+            "Synchronizacja w chmurze między urządzeniami",
+            "Funkcje zespołowe i administracja",
+            "SSO i zgodność z regulacjami",
+            "Dedykowane wsparcie"
+          ],
           "cta": "Skontaktuj się z działem sprzedaży",
           "upgradeCta": "Przejdź na Enterprise",
           "askOwner": "Poproś użytkownika {{name}} o zmianę planu Twojej przestrzeni."
