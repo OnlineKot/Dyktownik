@@ -126,12 +126,14 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           version=$(node -p "require('./package.json').version")
-          exe=$(ls dist/*.exe | grep -vi "uninstall" | head -n 1)
+          # Nazwa instalatora ma spacje, więc wszystko idzie w tablicy i w cudzysłowach.
+          exe=$(find dist -maxdepth 1 -name '*.exe' ! -iname '*uninstall*' | head -n 1)
           test -n "$exe"
           cp "$exe" dist/Dyktownik-Setup.exe
-          files="$exe dist/latest.yml dist/Dyktownik-Setup.exe"
-          for f in dist/*.exe.blockmap; do [ -f "$f" ] && files="$files $f"; done
-          gh release create "v$version" $files --target "${{ github.sha }}" \
+          files=("$exe" "dist/Dyktownik-Setup.exe" "dist/latest.yml")
+          for f in dist/*.exe.blockmap; do [ -f "$f" ] && files+=("$f"); done
+          ls -la dist
+          gh release create "v$version" "${files[@]}" --target "${{ github.sha }}" \
             --title "Dyktownik $version" \
             --notes "Niepodpisany instalator Windows. SmartScreen może pokazać ostrzeżenie: Więcej informacji, a potem Uruchom mimo to."
           echo "Link: https://github.com/OnlineKot/Dyktownik/releases/latest/download/Dyktownik-Setup.exe"

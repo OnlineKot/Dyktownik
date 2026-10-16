@@ -265,6 +265,7 @@
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
+    "artifactName": "Dyktownik-Setup-${version}.${ext}",
     "include": "resources/nsis/installer.nsh"
   },
   "dmg": {
