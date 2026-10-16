@@ -1,8 +1,8 @@
 name: Dyktownik - instalator Windows
 
-# Buduje niepodpisany instalator Windows i wrzuca go do stałego wydania
-# "dyktownik-windows", więc link do pobrania się nie zmienia:
-# https://github.com/OnlineKot/Dyktownik/releases/download/dyktownik-windows/Dyktownik-Setup.exe
+# Buduje niepodpisany instalator Windows i publikuje go jako wydanie v1.11.N
+# (razem z latest.yml, z którego korzysta wbudowany updater). Stały link:
+# https://github.com/OnlineKot/Dyktownik/releases/latest/download/Dyktownik-Setup.exe
 
 on:
   workflow_dispatch:
@@ -89,9 +89,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Build installer (unsigned)
+      # Każda budowa dostaje wyższy numer wersji, bo updater porównuje wersje
+      # i pobiera tylko nowsze. Zmiana działa tylko w tej budowie, nie w repo.
+      - name: Set build version
         shell: bash
-        run: npm run build:win -- --publish never --config electron-builder.unsigned-win.json
+        run: |
+          npm version "1.11.${{ github.run_number }}" --no-git-tag-version --allow-same-version
+          node -p "'Wersja budowy: ' + require('./package.json').version"
+
+      - name: Build and publish installer (unsigned)
+        shell: bash
+        run: npm run build:win -- --publish always --config electron-builder.unsigned-win.json
         env:
           GH_TOKEN: ${{ github.token }}
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
@@ -99,26 +107,17 @@ jobs:
           VITE_OPENWHISPR_API_URL: ${{ vars.VITE_OPENWHISPR_API_URL }}
           VITE_OPENWHISPR_OAUTH_CALLBACK_URL: ${{ vars.VITE_OPENWHISPR_OAUTH_CALLBACK_URL }}
 
-      - name: Name the installer
-        shell: bash
-        run: |
-          exe=$(ls dist/*.exe | grep -vi "uninstall" | head -n 1)
-          test -n "$exe"
-          cp "$exe" dist/Dyktownik-Setup.exe
-          ls -la dist/*.exe
-
-      - name: Publish to the fixed release
+      - name: Add the fixed-name installer to the release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          tag=dyktownik-windows
-          if ! gh release view "$tag" >/dev/null 2>&1; then
-            gh release create "$tag" --title "Dyktownik dla Windows (najnowszy)" \
-              --notes "Niepodpisany instalator Windows. Windows może pokazać ostrzeżenie SmartScreen: wybierz Więcej informacji, a potem Uruchom mimo to." \
-              --target "${{ github.sha }}" --prerelease
-          fi
-          gh release upload "$tag" dist/Dyktownik-Setup.exe --clobber
+          version=$(node -p "require('./package.json').version")
+          exe=$(ls dist/*.exe | grep -vi "uninstall" | head -n 1)
+          test -n "$exe"
+          cp "$exe" dist/Dyktownik-Setup.exe
+          gh release upload "v$version" dist/Dyktownik-Setup.exe --clobber
+          echo "Link: https://github.com/OnlineKot/Dyktownik/releases/latest/download/Dyktownik-Setup.exe"
 
       - name: Upload build as artifact too
         uses: actions/upload-artifact@v7

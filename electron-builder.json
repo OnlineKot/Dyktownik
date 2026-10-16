@@ -277,9 +277,9 @@
   },
   "publish": {
     "provider": "github",
-    "owner": "onlinekot",
-    "repo": "dyktownik",
+    "owner": "OnlineKot",
+    "repo": "Dyktownik",
     "private": false,
-    "releaseType": "draft"
+    "releaseType": "release"
   }
 }
