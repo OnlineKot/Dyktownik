@@ -4947,5 +4947,18 @@
     "permissionDenied": "已拒絕",
     "permissionRestricted": "受限",
     "permissionNotDetermined": "尚未請求"
+  },
+  "easterEgg": {
+    "title": "You found the hidden mode",
+    "intro": "Dyktownik likes it when people talk instead of type. Warm up by saying this out loud (it is a Polish tongue twister):",
+    "hint": "Hold your dictation shortcut and see if Dyktownik trips up.",
+    "another": "Another one",
+    "twisters": {
+      "0": "W Szczebrzeszynie chrząszcz brzmi w trzcinie.",
+      "1": "Król Karol kupił królowej Karolinie korale koloru koralowego.",
+      "2": "Stół z powyłamywanymi nogami.",
+      "3": "Strzeż się, szczeżui, szczupaka.",
+      "4": "Nie pieprz, Pietrze, wieprza pieprzem, bo mu zaszkodzisz."
+    }
   }
 }
