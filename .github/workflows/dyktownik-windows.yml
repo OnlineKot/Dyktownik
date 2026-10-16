@@ -105,12 +105,12 @@ jobs:
           npm version "1.11.${{ github.run_number }}" --no-git-tag-version --allow-same-version
           node -p "'Wersja budowy: ' + require('./package.json').version"
 
-      - name: Build and publish installer (unsigned)
+      - name: Build installer (unsigned)
         shell: bash
         # Bez "npm run build:win": jego hook prebuild pobierałby też to, co pominięto wyżej.
         run: |
           npm run build:renderer
-          npx electron-builder --win --publish always --config electron-builder.unsigned-win.json
+          npx electron-builder --win --publish never --config electron-builder.unsigned-win.json
         env:
           GH_TOKEN: ${{ github.token }}
           CSC_IDENTITY_AUTO_DISCOVERY: "false"
@@ -118,7 +118,9 @@ jobs:
           VITE_OPENWHISPR_API_URL: ${{ vars.VITE_OPENWHISPR_API_URL }}
           VITE_OPENWHISPR_OAUTH_CALLBACK_URL: ${{ vars.VITE_OPENWHISPR_OAUTH_CALLBACK_URL }}
 
-      - name: Add the fixed-name installer to the release
+      # Wydanie tworzymy sami: gh zakłada też brakujący tag v1.11.N na tym commicie.
+      # latest.yml i .blockmap są potrzebne wbudowanemu updaterowi.
+      - name: Publish release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
@@ -127,7 +129,11 @@ jobs:
           exe=$(ls dist/*.exe | grep -vi "uninstall" | head -n 1)
           test -n "$exe"
           cp "$exe" dist/Dyktownik-Setup.exe
-          gh release upload "v$version" dist/Dyktownik-Setup.exe --clobber
+          files="$exe dist/latest.yml dist/Dyktownik-Setup.exe"
+          for f in dist/*.exe.blockmap; do [ -f "$f" ] && files="$files $f"; done
+          gh release create "v$version" $files --target "${{ github.sha }}" \
+            --title "Dyktownik $version" \
+            --notes "Niepodpisany instalator Windows. SmartScreen może pokazać ostrzeżenie: Więcej informacji, a potem Uruchom mimo to."
           echo "Link: https://github.com/OnlineKot/Dyktownik/releases/latest/download/Dyktownik-Setup.exe"
 
       - name: Upload build as artifact too
